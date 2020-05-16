@@ -1,0 +1,153 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Linguagem R 
+- Fatores e Funções
+- Estruturas de Controles
+- Pacotes 
+- Expressoes Regulares 
+- Manipular Datas
+
+# Big Data na Prática 1 - Analisando a Temperatura Média nas Cidades Brasileiras
+
+#0Objetivo: análise da temperatura média nas cidades brasileiras
+1. Definir problema de négocio
+2. Coletar os dados
+3. Carregar e processar dados
+4. Realizar processo de análise (paronama passado ou modelagem preditiva)
+
+# Obs: Caso tenha problemas com a acentuação, consulte este link:
+# https://support.rstudio.com/hc/en-us/articles/200532197-Character-Encoding
+
+setwd("C:/FCD/BigDataRAzure/Cap03")
+getwd()
+
+# Dataset:
+# Berkeley Earth - coleta das temperaturas de várias cidades ao redor do mundo nos últimos 100 anos. 
+# http://berkeleyearth.org/data - Análise de aquecimento global
+
+# TemperaturasGlobais.csv ~ 78 MB (zip) ~ 496 MB (unzip)
+# Faça o download do arquivo zip no link abaixo e descompacte na mesma pasta onde está este script. 
+# https://drive.google.com/open?id=1nSwP3Y0V7gncbnG_DccNhrTRxmUNqMqa
+
+# Instalando e Carregando Pacotes
+# Obs: os pacotes precisam ser instalados apenas uma vez. Se já instalou em outros scripts, não é necessário instalar novamente!
+
+install.packages("readr")
+install.packages("data.table") # manipulação de dados
+install.packages("dplyr") #
+install.packages("ggplot2") # visualização de dados
+
+# Carregando dados na seção 
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(data.table)
+
+
+=============================================== Carregando Dados ==================================================
+
+# Carregando os dados (Usando um timer para comparar o tempo de carregamento com diferentes funções)
+
+# Usando read.csv2()
+system.time(df_teste1 <- read.csv2("TemperaturasGlobais/TemperaturasGlobais.csv"))
+#system.time medir tempo do carregamento arquivo utilizando read.csv2
+
+# Usando read.table()
+system.time(df_teste2 <- read.table("TemperaturasGlobais/TemperaturasGlobais.csv"))
+#system.time medir tempo do carregamento arquivo utilizando read.table
+#read.table é uma função que carrega mais rápido e um pouco mais otimizada
+
+
+=============================================== Otimizando Carga de Dados ==========================================
+
+# Usando fread(), função do pacote data.table - Fast and friedly file finagler
+?fread
+system.time(df <- fread("TemperaturasGlobais/TemperaturasGlobais.csv"))
+#fread() ocupa menos da metade de espaço em memória, melhor processamento e agilidade
+
+====================================================================================================================
+
+# Criando subsets dos dados carregados
+cidadesBrasil <- subset(df, Country == 'Brazil') #filtro apenas para cidades no brasil
+cidadesBrasil <- na.omit(cidadesBrasil) #aplicar função na.omit() para remover valores missing que afetam a análise
+head(cidadesBrasil) #visualizar primeiras linhas do subset
+nrow(df)            #número de linhas do dataset completo
+nrow(cidadesBrasil) #número de linhas do subset
+dim(cidadesBrasil   #dimensões do subset, número de colunas e linhas
+
+
+====================================================================================================================    
+
+                                                #Transformando Data
+# Convertendo as Datas
+cidadesBrasil$dt <- as.POSIXct(cidadesBrasil$dt,format='%Y-%m-%d') #transformando a coluna e gravando nela mesma
+cidadesBrasil$Month <- month(cidadesBrasil$dt) #extraindo função mês e gravando numa nova coluna mês
+cidadesBrasil$Year <- year(cidadesBrasil$dt)   #extraindo função ano e gravando numa nova coluna ano
+
+
+======================================================================================================================    
+                                               
+                                            #Carregando subsets de subset
+
+# Palmas
+plm <- subset(cidadesBrasil, City == 'Palmas') #filtrando por cidade e gravando em novo objeto
+plm <- subset(plm, Year %in% c(1796,1846,1896,1946,1996,2012)) #filtrando por vetor de anos específicos
+
+# Curitiba
+crt <- subset(cidadesBrasil, City == 'Curitiba')#filtrando por cidade e gravando em novo objeto
+crt <- subset(crt, Year %in% c(1796,1846,1896,1946,1996,2012))  #filtrando por vetor de anos específicos
+
+# Recife
+recf <- subset(cidadesBrasil, City=='Recife')#filtrando por cidade e gravando em novo objeto
+recf <- subset(recf,Year %in% c(1796,1846,1896,1946,1996,2012)) #filtrando por vetor de anos específicos
+
+====================================================================================================================
+    
+                                                #Plot para Palmas
+p_plm <- ggplot(plm, aes(x = (Month), y = AverageTemperature, color = as.factor(Year))) +
+  geom_smooth(se = FALSE,fill = NA, size = 2) +
+  theme_light(base_size = 20) +
+  xlab("Mês")+
+  ylab("Temperatura Média") +
+  scale_color_discrete("") +
+  ggtitle("Temperatura Média ao longo dos anos em Palmas") +
+  theme(plot.title = element_text(size = 18))
+    
+
+                                                #Plot para Curitiba
+p_crt <- ggplot(crt, aes(x = (Month), y = AverageTemperature, color = as.factor(Year))) +
+  geom_smooth(se = FALSE,fill = NA, size = 2) +
+  theme_light(base_size = 20) +
+  xlab("Mês")+
+  ylab("Temperatura") +
+  scale_color_discrete("") +
+  ggtitle("Temperatura Média ao longo dos anos em Curitiba") +
+  theme(plot.title = element_text(size = 18))
+    
+    
+                                                #Plot para Recife
+p_recf <- ggplot(recf, aes(x = (Month), y = AverageTemperature, color = as.factor(Year))) +
+  geom_smooth(se = FALSE,fill = NA, size = 2) +
+  theme_light(base_size = 20) +
+  xlab("Mês")+
+  ylab("Temperatura Média") +
+  scale_color_discrete("") +
+  ggtitle("Temperatura Média ao longo dos anos em Recife") +
+  theme(plot.title = element_text(size = 18))
+
+
+# Plotando
+p_plm
+p_crt
+p_recf
+
+
+
+# Plotagem de temperatura Média ao longo dos anos por cidade. 
+# Eixo y: temperatura média
+# Eixo x: meses
+# linhas: anos correspondete
