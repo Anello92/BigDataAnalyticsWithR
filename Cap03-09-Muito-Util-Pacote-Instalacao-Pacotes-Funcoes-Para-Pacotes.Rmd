@@ -1,0 +1,68 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+                                           # Pacotes e Instalação de Pacotes
+
+
+
+# De onde vem as funções? Pacotes (conjuntos de funções)
+# Quando você inicia o RStudio, alguns pacotes são 
+# carregados por padrão
+
+# Busca os pacotes carregados
+search()
+
+# Instala e carrega os pacotes
+install.packages(c("ggvis", "tm", "dplyr")) # Instalando um vetor de pacotes
+library(ggvis)
+library(tm)
+require(dplyr)
+
+search()  # Indica pacotes que ja estão carregados
+?require
+detach(package:dplyr)
+
+========================================================================================================================
+
+                                                  # Muito útil
+
+
+# Lista o conteúdo dos pacotes com a função ls - list objects
+?ls {base}
+ls(pos = "package:tm") # toda as função que pertencem ao pacote "tm" - IMPORTANTE
+ls(getNamespace("tm"), all.names = TRUE) # listar atributos, métodos|funções de "tm"
+
+
+
+# Lista as funções de um pacote
+lsf.str("package:tm") # permite listar as funções dentro de um pacote - MELHOR COMPREENSÃO
+
+lsf.str("package:ggplot2") # é necessário carregar o pacote para a função funcionar
+library(ggplot2)
+lsf.str("package:ggplot2")
+
+
+# R possui um conjunto de datasets preinstalados. 
+
+library(MASS) # alguns pacotes já vem com a linguagem e basta carregá-los
+data()        # listar todos os datasets disponíveis em R automaticamente
+
+?lynx         # dataset chamaod lynx - dataset de armadilhas canadenses
+head(lynx)
+head(iris)
+tail(lynx)
+summary(lynx)
+
+plot(lynx)
+hist(lynx)
+head(iris)
+iris$Sepal.Length # imprimir uma coluna dentro do dataset
+
+sum(Sepal.Length) # ERRO - não sabe o dataset
+?attach
+attach(iris)      # attach para orientar o interpretador de qual objeto está no caminho
+sum(Sepal.Length)
+
+
