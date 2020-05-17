@@ -1,0 +1,119 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Funções
+
+
+
+
+# Help contém praticamente todo que precisamos antes de recorrer ao google
+
+?sample # samples faz parte do pacote {base} 
+
+args(sample) #visualizar o conteúdo de uma função com args()
+args(mean)
+args(sd)
+
+
+# Funções Built-in
+abs(-43) #mostrar valor absoluto de um número 
+sum(c(1:5))
+mean(c(1:5))
+round(c(1.1:5.8))
+rev(c(1:5)) 
+seq(1:5)
+sort(rev(c(1:5)))
+append(c(1:5), 6)
+
+vec1 <- c(1.5, 2.5, 8.4, 3.7, 6.3)
+vec2 <- rev(vec1)
+vec2 # vetor reverso 
+
+
+# Funções dentro de funções
+plot(rnorm(10)) # plotar distribuição normal com parâmetro 10
+mean(c(abs(vec1), abs(vec2))) #calcular a média de dois vetores absolutos dentro de outro vetor
+
+=========================================================================================================================
+
+                                                    # Criando funções
+
+
+myfunc <- function(x) { 
+    x + x }
+myfunc(10)
+class(myfunc) # "function"
+
+
+myfunc2 <- function(a, b) { #receberá dois parâmetros
+  valor = a ^ b
+  print(valor)
+}
+myfunc2(3, 2)
+
+
+==========================================================================================================================
+
+                                                   # Sample - selecionando amostra do range
+
+jogando_dados <- function() {  # Escopo local dentro das chaves da função 
+  num <- sample(1:6, size = 1) # Selecionando amostra do range de tamanho 1
+  num
+}
+
+jogando_dados()
+
+
+# Escopo - atenção ao nomear funções
+print(num)
+num <- c(1:6)
+num #Global
+
+==========================================================================================================================
+
+                                                   # Funções sem número definido de argumentos
+
+
+vec1 <- (10:13)
+vec2 <- c("a", "b", "c", "d")
+vec3 <- c(6.5, 9.2, 11.9, 5.1)
+
+myfunc3 <- function(...){ # (...) indica que não existe um número fixo de parâmetros
+  df = data.frame(cbind(...))
+  print(df)
+}
+
+myfunc3(vec1)
+
+myfunc3(vec2, vec3)
+
+myfunc3(vec1, vec2, vec3)
+
+
+==========================================================================================================================
+
+# Funções Built-in - Não tente recriar a roda
+# Comparação de eficiência entre função vetorizada e função "vetorizada no R"
+
+x <- 1:10000000
+
+# Função que calcula a raiz quadrada de cada elemento de um vetor de números
+meu_sqrt <- function(numeros) {
+  resp <- numeric(length(numeros))
+  for(i in seq_along(numeros)) {
+    resp[i] <- sqrt(numeros[i])
+  }
+  return(resp) #retornar o resultado a operação feita na função
+}
+
+system.time(x2a <- meu_sqrt(x))
+
+system.time(x2b <- sqrt(x)) #infinitamente mais rápido
+
+# Sua máquina pode apresentar resultado diferente por conta da precisão de cálculo do processador.
+identical(x2a, x2b)
+
+
+
