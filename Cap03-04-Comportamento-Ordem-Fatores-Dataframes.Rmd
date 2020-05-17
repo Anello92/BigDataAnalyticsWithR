@@ -1,0 +1,60 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Fatores e Dataframes - Compreendendo Comportamento da Ordem dos Fatores
+
+
+# Níveis dos fatores
+# Internamente, o R armazena valores inteiros e faz um mapeamento para as strings (em ordem alfabética)
+# e agrupa as estatísticas por níveis.
+
+# Criando vetores
+vec1 <- c(1001, 1002, 1003, 1004, 1005) # Vetor de números
+vec2 <- c(0, 1, 1, 0, 2) # Vetor de números
+vec3 <- c('Verde','Laranja','Azul','Laranja','Verde') # Vetor de caracteres
+
+# Unindo os vetores em um dataframe
+df <- data.frame(vec1, vec2, vec3)
+df
+
+# R categorizou a última coluna de cores como fator de 3 níveis
+str(df)
+
+# Verificando os níveis do fator apontando para a 3a coluna do data frame
+# Os níveis estão categorizados em ordem alfabética
+levels(df$vec3)
+
+================================================================================================================================
+                                                   
+                                                    # Criando nova coluna no data frame
+
+# Criando uma outra coluna e atribuindo labels 
+# Chamando a coluna vec3 do data frame, aplicando labels de cor e colocando tudo isso como fator. Por fim gravando numa nova coluna.
+df$cat1 <- factor(df$vec3, labels = c("cor2", "cor1", "cor3"))
+df
+
+
+=================================================================================================================================
+                                                    
+                                                    # Compreendendo o registro dos fatores
+
+# Internamente, os fatores são registrados como inteiros, mas a ordenação segue a ordem alfabética
+# das strings
+str(df)
+
+# Os vetores seguiram a ordem alfabética dos níveis classificados pelo R
+# Azul = cor2
+# Laranja = cor1
+# Verde = cor3
+
+=================================================================================================================================
+ 
+                                                  # Criando uma outra coluna e atribuindo labels
+
+# Ao aplicarmos a função factor() a coluna vec2, internamente o R classificou em ordem alfabética
+df$cat2 <- factor(df$vec2, labels = c("Divorciado", "Casado", "Solteiro"))
+df
+str(df)
+levels(df$cat2)
