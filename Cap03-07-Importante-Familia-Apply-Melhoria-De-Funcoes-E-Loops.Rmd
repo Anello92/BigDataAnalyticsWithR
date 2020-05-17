@@ -1,0 +1,244 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Família Apply - Uma Forma Elegante de Fazer Loops
+
+========================================================================================================================
+
+                                        # Conjunto de funções da família Apply
+
+
+#  apply() - arrays e matrizes
+# tapply() - os vetores podem ser divididos em diferentes subsets
+# lapply() - aplica uma função a vetores e listas
+# sapply() - versão amigável da lapply
+# vapply() - similar a sapply, com valor de retorno modificado
+# rapply() - similar a lapply()
+# eapply() - gera uma lista
+# mapply() - similar a sapply, multivariada
+# by - fazer agregação com os dados que deseja realizar loop - Não é da família, porém comportamento similar. 
+
+
+========================================================================================================================
+
+
+                                     # Se estivermos trabalhando com os objetos: 
+
+# list, numeric, character (list/vecor)          => sapply ou lapply
+# matrix, data.frame (agregação por coluna)      => by / tapply
+# Operações por linha ou operações específicas   => apply
+
+# Tais funções oferecem perfomance melhor do que tentar usar um "loop", inclusive muito mais fáceis
+
+
+=========================================================================================================================
+
+# Usando um Loop
+lista1 <- list(a = (1:20), b = (35:67))
+
+# Calculando o total de cada elemento da lista com loop for
+valor_a = 0
+valor_b = 0
+
+for (i in lista1$a){
+  valor_a = valor_a + i 
+}
+
+for (j in lista1$b){
+  valor_b = valor_b + j
+}
+
+print(valor_a)
+print(valor_b)
+
+=========================================================================================================================
+
+                                        # Calculando cada elemento da lista com sapply
+# Somando elementos da lista 
+?sapply
+sapply(lista1, sum)
+
+# Calcular a média de cada vetor dentro da lista
+sapply(lista1, mean)
+
+
+# apply()
+?apply
+
+=========================================================================================================================
+
+# Criando uma matriz 3 x 3
+x <- matrix(c(20, 13, 65, 32, 45, 12, 76, 49, 82), nr = 3, byrow = T)
+x
+
+apply(x, mean) # chamar a função aplica (matriz_x, função) - ERRO (faltou parâmetro)
+apply(x, 1, mean) # calculando a média pela orientação de linha
+apply(x, 2, mean) 
+apply(x, 1, plot) # plotando valores da linha 1 da matriz
+
+resultapply <- apply(x, 1, mean) # gravando apply em outro objeto
+resultapply # objeto do tipo numérico
+
+
+
+=========================================================================================================================
+
+
+                                            # Aplicando apply() a um Dataframe
+
+
+escola <- data.frame(Aluno = c('Bob', 'Tereza', 'Marta', 'Felipe', 'Zacarias', 'Elton'),
+                     Fisica = c(91, 82, 75, 97, 62, 74),
+                     Matematica = c(99, 100, 86, 92, 91, 87),
+                     Quimica = c(56, 72, 49, 68, 59, 77))
+
+escola
+escola$Matematica
+
+
+# Calculando a média por aluno
+escola$Media = NA # criando variável dentro do fata frame escola atribuindo valor vazio à coluna
+escola
+
+
+# Chamar objeto escola, atrbiuindo à coluna média, todas as linhas (antes da virgula), selecionando as colunas 2, 3 e 4, 
+#parâmetro de margem em linha, função de média
+
+escola$Media = apply(escola[,c(2, 3, 4)], 1, mean) #usando um vetor de coluna simulando um índice de coluna
+escola
+escola$Media = round(escola$Media) # Arredondando o valor da coluna média e Gravando na própria coluna
+escola
+
+=========================================================================================================================
+
+                                                        # tapply()
+
+?gl # gerar níveis de fator no momento de criar a coluna/objeto
+tabela_basquete <- # 3 vetores
+  data.frame(equipe = gl(5, 5, labels = paste("Equipe", LETTERS[1:5])), #criando 5 níveis, com "letras" de 1 a 5
+             jogador = sample(letters, 25), # pegar 25 letras, de maneira aleatória
+             num_cestas = floor(runif(25, min=0, max=50))) # gerar números aleatórios para o número de cestas
+
+
+
+View(tabela_basquete)
+summary(tabela_basquete)
+
+
+========================================================================================================================
+
+                                     # Como calcular o total de cestas por Equipe? Usando SQL em R
+
+
+# tapply() vs sqldf
+install.packages('sqldf') # Instalar pacote sqldf
+library(sqldf)
+
+# função sqldf
+# 1.SELECT em "equipe",
+#  2. SUM(num_cestas)
+#   3. FROM tabela_basquete
+#    4. GROUP BY eqipe
+
+sqldf("select equipe, sum(num_cestas) from tabela_basquete group by equipe")
+
+========================================================================================================================
+
+                                    # Obter mesmo resultado de SQL em R - tapply
+
+?tapply {base}
+
+# 1. Selecionar a coluna a > tabela_basquete$num_cestas
+#  2. Indicado como fazer o agrupamento > tabela_basquete$equipe
+#   3. Apontando a função de somar valores
+tapply(tabela_basquete$num_cestas, tabela_basquete$equipe, sum)
+
+# 1. Selecionar a colun > tabela_basquete$num_cestas
+#  2. Indicado como fazer o agrupamento > tabela_basquete$equipe
+#   3. Apontando a função de média valores
+tapply(tabela_basquete$num_cestas, tabela_basquete$equipe, mean)
+
+
+========================================================================================================================
+
+
+# by - Aplica uma função para um dataframe dividido por fatores
+?by {base^}
+
+# criando um conjunto de dados species
+dat <- data.frame(species=c(rep(c(1,2,3), each=5)), 
+                  petal.length=c(rnorm(5, 4.5, 1), 
+                                 rnorm(5, 4.5, 1), 
+                                 rnorm(5, 5.5, 1)), 
+                  petal.width=c(rnorm(5, 2.5, 1), 
+                                rnorm(5, 2.5, 1), 
+                                rnorm(5, 4, 1)))
+
+# converter coluna species em fator
+dat$species <- factor(dat$species)
+# visualizar em tabela
+View(dat)
+
+
+#by(dataset, coluna, criar função)
+by(dat, dat$species, function(x){
+  mean.pl <- mean(x$petal.length)  # calcular o comprimento médio da pétala para cada espécie
+})
+
+========================================================================================================================
+
+                                     # lapply() - aplica uma função a uma lista ou vetor
+?lapply
+
+# Criando uma lista
+lista1 <- list(a = (1:10), b = (45:77))
+lista1
+lapply(lista1, sum) # somando cada um dos elementos da lista
+sapply(lista1, sum) # mesma finalidade com saídas diferentes
+
+========================================================================================================================
+
+                                     # vapply() - aplica uma função a uma lista ou vetor
+# vapply()
+?vapply
+
+# A função fivenum() retorna 5 estatísticas do conjunto de dados: (minimum, lower-hinge, median, upper-hinge, maximum) 
+# https://stat.ethz.ch/R-manual/R-patched/library/stats/html/fivenum.html
+
+vapply(lista1,  # dataset ou lista acima
+       fivenum,    # função five number summary (minimum, lower-hinge, median, upper-hinge, maximum) for the input data.
+       c(Min. = 0, # vetor com valor mínimo
+     "1stQu." = 0, # 1o quartil
+       Median = 0, # mediana
+    "3rd Qu." = 0, # 3o quartil
+          Max = 0))# valor máximo
+
+# output deste apply: resumo estatístico para cada elemento da lista
+
+========================================================================================================================
+
+# replicate
+?replicate
+replicate(7, runif(10)) #runif para criar um conjunto de daos totalmente aleatório
+
+
+========================================================================================================================
+
+                            # mapply() - aplica uma função a múltiplos argumentos de uma lista ou vetor
+?mapply
+  mapply(rep, 1:4, 4:1)
+# mapply(função, conjunto, conjunto)
+
+========================================================================================================================
+
+                            # rapply() - recursivamente aplica uma função a uma lista
+?rapply
+
+lista2 <- list(a = c(1:5), b = c(6:10)) #Criar lista número dois
+lista2
+
+rapply(lista2, sum) # aplicar soma de maneira recursiva, somando como próximo
+rapply(lista2, sum, how = "list") # adicionar parâmetro how = "list" para imprimir de forma melhor discriminada por dimensão
+
