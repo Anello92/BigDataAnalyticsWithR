@@ -1,0 +1,49 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Boxplots - box-and-whisker plot {graphics}
+
+
+?boxplot
+?sleep #dataset
+
+# Permite utilizar as colunas sem especificar o nome do dataset
+attach(sleep)
+View(sleep)
+
+# Construção do boxplot
+sleepboxplot = boxplot(data = sleep,     # dataset
+                       extra ~ group,    # fórmula para relacionar as duas variáveis no plot
+                       main = "Duração do Sono", # título
+                       col.main = "red", # cor do título
+                       ylab = "Horas",   # título eixo y
+                       xlab = "Droga")   # título eixo x
+
+
+
+# Cálculo da média, selecionando as duas variáveis e calculando média
+# função by para "substituir" o loop, utilizado para fazer agrupamento
+medias = by(extra, group, mean)
+
+# Adiciona a média criada ao gráfico de boxplot, camadas
+points(medias, col = "red")
+
+
+# Boxplot horizontal
+horizontalboxplot = boxplot(data = sleep, 
+                            extra ~ group, # relação
+                            ylab = "", # label como vazio 
+                            xlab = "", # label como vazio -
+                            horizontal = T) # horizontal
+
+horizontalboxplot = boxplot(data = sleep, 
+                            extra ~ group,
+                            ylab = "", 
+                            xlab = "", 
+                            horizontal = T,
+                            col = c("blue", "red") ) # vetor de cores
+
+
+
