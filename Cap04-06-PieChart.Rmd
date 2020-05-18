@@ -1,0 +1,56 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+                            
+                                                                           
+                                                                # Gráficos de Pizza
+
+
+
+?pie
+
+# Criando as fatias
+fatias = c(40, 20, 40) # vetor com a representação percentual de cada fatia
+
+# Nomeando os labels
+paises = c("Brasil", "Argentina", "Chile") # vetor de strings
+
+# Unindo paises e fatias colando os dois vetores
+paises = paste(paises, fatias)
+
+# Incluindo mais detalhes no label
+paises = paste(paises, "%", sep = "")
+
+colors()
+
+# Construindo um gráfico de pizza
+pie(fatias, 
+    labels = paises,
+    col = c("darksalmon", "gainsboro", "lemonchiffon4"), 
+    main ="Dsitribuição de Vendas")
+
+
+# Trabalhando com dataframes
+?iris
+attach(iris)                  #anexar iris para manipular este dataset
+Values = table(Species)       #distribuição de frequência
+labels = paste(names(Values)) #paste para definir os lables
+
+pie(Values, 
+    labels = labels, 
+    main = "Distribuição de Espécies") # aplicando o piechart
+
+
+# 3D
+install.packages("plotrix")    #necessário {plotrix}
+library(plotrix)
+
+pie3D(fatias, 
+      labels = paises,
+      explode = 0.05, #espaçamento das fatias
+      col = c("steelblue1", "tomato2", "tan3"), 
+      main = "Dsitribuição de Vendas") #título principal 
+
+
