@@ -1,0 +1,59 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+    # Scatterplots - X variável independente, Y variável dependente
+
+
+
+# Definindo conjuntos de dados aleatórios
+
+set.seed(67)      #função para reproduzir mesmos exemplos ao compartilhar resultado e visualizar mesmos exemplos
+x = rnorm(10,5,7)
+y = rpois(10,7)
+z = rnorm(10,6,7)
+t = rpois(10,9)
+
+
+# Cria o Scatterplot 
+plot(x, y, 
+     col = 123,  # cor
+     pch = 10,   # tipo de símbolo
+     main = "Multi Scatterplot", # título do gráfico
+     col.main = "red", # cor para main
+     cex.main = 1.5,   # tamanho fonte main
+     xlab = "Variável Independente", # nome eixo x
+     ylab = "Variável Dependente")   # nome eixo y
+
+
+
+==========================================================================================================
+
+                                   # Multi Scatterplot - Novas relações entre variáveis points()
+
+
+                                           
+# Adicionar outros dados 
+# 1. Chamar a função points e a relação dos objetos z e t
+#  2. Mudar a cor para = "blue" e o símbolo = 4
+points(z, t, col = "blue", pch = 4)
+
+# Adicionar mais outro conjunto de dados
+# 1. Chamar a função points e a relação dos objetos y e t
+#  2. Mudar a cor para = 777 e símbolo = 9
+points(y, t, col = 777, pch = 9)
+
+
+
+# Cria  
+legend(-6,5.9,                                        # determina a posição da legenda
+       legend = c("Nível 1", "Nível 2", "Nível 3"),   # vetor com cada cor
+       col = c(123, "blue", 777),                     # vetor de cor por nome
+       pch = c(10,4,9),                               # vetor com símbolos
+       cex = 0.65,
+       bty = "n")
+
+
+
+
