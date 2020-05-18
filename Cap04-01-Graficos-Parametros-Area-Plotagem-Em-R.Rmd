@@ -1,0 +1,252 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+                             # Gráficos em R - Base Plotting System|Sistema básico de plotagem
+
+
+================================================================================================================
+
+# Visualizar lista de pacotes base carregados
+search()
+
+
+# Demo - função demo, demonstra COMO UTILIZAR AS FUNÇÕES de um determinado pacote. 
+demo("graphics") # exemplo com pacote {graphics}
+
+================================================================================================================
+
+                                          # Plot Básico de duas variáveis
+x = 5:7
+y = 8:10
+plot(x,y)
+?plot
+
+altura <- c(145, 167, 176, 123, 150)
+largura <- c(51, 63, 64, 40, 55)
+
+plot(altura, largura)
+
+================================================================================================================
+
+
+                                             # Plotando Dataframe
+
+?lynx #dataset R base
+plot(lynx)
+
+                        # Montando camadas do gráfico, ajustando parâmetro de plot simples
+
+
+plot(lynx, ylab = "Plots com Dataframes", xlab = "")             #(dataset, label de y, label de x)
+plot(lynx, ylab = "Plots com Dataframes", xlab = "Observações")  #(dataset, label de y, label de x)
+plot(lynx, main = "Plots com Dataframes", col = 'red')           #(dataset, titulo principal, cor do plot)
+plot(lynx, main = "Plots com Dataframes", col = 'red', col.main = 52, cex.main = 1.5)
+     #(dataset, titulo principal, cor plot, cor titulo, tam. fonte título)
+
+
+================================================================================================================
+
+
+
+library(datasets) #datasets é um conjunto de datasets
+hist(warpbreaks$breaks) #chamando histograma para visualização de distribuição de frequência
+
+
+airquality # dataset airquality
+transform(airquality, Month = factor(Month))
+boxplot(Ozone ~ Month, airquality, xlab = "Month", ylab = "Ozone (ppb)")
+
+================================================================================================================
+
+
+                        # Especificando principais parâmetros para funções (plot, hist, boxplot)
+
+# col - cor do plot
+# lty - tipo de linha
+# lwd - largura de linha
+# pch - símbolo no plot|tipo de ponto utilizado no gráfico
+# xlab - label do eixo x
+# ylab - label do eixo y
+# las - como os labels dos eixos são orientados|vertical ou horizontal
+# bg - background color/cor de fundo da área de plotagem
+# mfrow - número de plots por linha na área de plotagem
+# mfcool - número de plots por coluna na área de plotagem
+
+================================================================================================================
+
+
+                                         # Funções Básicas de Plot
+
+# plot() - scatterplots
+# lines() -  adiciona linhas ao gráfico
+# points() - adiciona pontos ao gráfico
+# text() - adiciona label ao gráfico
+# title() - adiciona título ao gráfico
+
+================================================================================================================
+
+                                    # Ajuste dos parâmetros dos Gráficos
+
+
+?par  # esta função permite fazer uma query/consulta ou configuração aos parâmetros pgráficos
+par()
+par('pch') #consultando parâmetro específico
+par('lty')
+
+x = 2:4    # criando vetor
+plot(x, pch = "*") # função plot para vetor x e dizer que pch = "*", ou seja, o SÍMBOLO/Tipo do "ponto" de plotagem
+
+
+# Área de plot
+par(mfrow = c(2,2), col.axis = "red") # chamar a função par e dividir a área de plotagem em 4 partes, mfrow = vetor 2x2 | 4 quadrante
+
+
+
+                                  # Muito útil para comparações de dados entre gráfico
+
+
+#ATENÇÃO: resolução de plotagem gerra erros se não calibrada
+
+# Primeiro gráfico do primeiro quadrante LAS = 0
+plot(1:8, las = 0, xlab = "xlab", ylab = "ylab", main = "LAS = 0")
+
+# Segundo gráfico do segundo quadrante LAS = 1
+plot(1:8, las = 1, xlab = "xlab", ylab = "ylab", main = "LAS = 1")
+
+# Terceiro gráfico do terceiro quadrante LAS = 2
+plot(1:8, las = 2, xlab = "xlab", ylab = "ylab", main = "LAS = 2")
+
+# Quarto gráfico do quarto quadrante LAS = 3
+plot(1:8, las = 3, xlab = "xlab", ylab = "ylab", main = "LAS = 3")
+
+legend("topright", pch = 1, col = c("blue", "red"), legend = c("Var1","Var2"))
+par(mfrow = c(1,1)) #uma das formas de solucionar o erro é ajusta o parâmetro, aplicando apenas 1 gráfico à área de plotagem
+
+# Cores disponíveis
+colors()
+
+
+================================================================================================================
+
+
+                                           #função png() e dev.off() 
+
+
+# Salvando os gráficos para incluir em documentos e apresentações
+
+# png - função png(nome do arquivo, largura, altura, resolução) a saída é um arquivo
+png("Grafico1.png", width = 500, height = 500, res = 72)
+
+# necessário dar o comando dev.off() para que a saída não permaneça para arquivar e sim plotar na área de plotagem
+
+plot(iris$Sepal.Length, iris$Petal.Length,
+     col = iris$Species,
+     main = "Gráfico gerado a partir do Iris")
+
+dev.off() # fechar dispositivo
+
+================================================================================================================
+
+
+                                          #função pdf() e dev.off()
+
+
+pdf("Grafico2.pdf")
+
+plot(iris$Sepal.Length, iris$Petal.Length,
+     col = iris$Species,
+     main = "Gráfico gerado a partir do Iris")
+
+dev.off() # fechar disposito
+
+================================================================================================================
+
+
+# Estendendo as funções do plot
+install.packages('plotrix')
+library(plotrix)
+?plotrix # Acessórios especializados para plotagem.  
+
+
+par(mfrow = c(1,1), col.axis = "red")                                           # Definindo área de plotagem
+plot(1:6, las = 3, xlab = "lty 1:6", ylab = "", main = "Mais opções ao plot")   # Criando plot
+ablineclip(v=1, lty=1, col="sienna2", lwd=2)                                    # Adicionar uma linha ao gráfico com ablineclip()
+ablineclip(v=2, lty=1, col="sienna2", lwd=2)
+ablineclip(v=3, lty=1, col="sienna2", lwd=2)
+ablineclip(v=4, lty=1, col="sienna2", lwd=2)
+ablineclip(v=5, lty=1, col="sienna2", lwd=2)
+ablineclip(v=6, lty=1, col="sienna2", lwd=2)
+ablineclip(v=7, lty=1, col="sienna2", lwd=2)                                    # v, traça a linha vertical na posição indicada v=7
+
+
+
+plot(lynx)                             # plot de lynx retorna um gráfico de linha
+plot(lynx, type="p", main="Type p")    # mudar o tipo para p, transforma os valores em pontos
+plot(lynx, type="l", main="Type l")    # mudar o tipo para l, transforma os valores em linha
+plot(lynx, type="b", main="Type b")    # mudar o tipo para b, transforma os valores em ponto e linha
+plot(lynx, type="o", main="Type o")  
+plot(lynx, type="h", main="Type h")    # mudar o tipo para h, transforma os valores em linhas na vertical
+plot(lynx, type="s", main="Type s")    # mudar o tipo para s, transforma os valores em escada
+plot(lynx, type="n", main="Type n")    # mudar o tipo para n, para limpar completamente o gráfico
+
+================================================================================================================
+
+
+                                         # Dois plots juntos na mesma REGIÃO
+
+
+par(mar=c(4,3,3,3), col.axis="black") # Definindo área de plotagem
+
+plot(cars$speed, type="s", col="red", bty="n", xlab="Cars ID", ylab="") # Carregar o plot
+text(8, 14, "Velocidade", cex=0.85, col="red") 
+par(new=T) 
+
+plot(cars$dist, type="s", bty="n", ann=F, axes=F, col="darkblue") # Criando OUTRO plot na mesma região 
+axis(side=4)
+text(37, 18, "Distância", cex=0.85, col="darkblue") 
+
+title(main="Velocidade x Distância")
+
+
+# Plots a partir de datasets
+df <- read.csv('pibpercap.csv', stringsAsFactors = F)
+df_1982 <- subset(df, ano == 1982) #subset para extrair apenas o ano de 82
+plot(expectativa ~ pibpercap, data = df_1982, log = "x")
+View(df) #visualizar no formato de tabela
+
+
+================================================================================================================
+
+                                                      
+                                               # Nomeando colunas
+ 
+
+# Nomeando colunas
+mycol <- c(Asia = "tomato", 
+           Europe = "chocolate4", 
+           Africa = "dodgerblue2", 
+           Americas = "darkgoldenrod1", 
+           Oceania = "green4")
+
+# Plot
+plot(expectativa ~ pibpercap, data = df_1982, log = "x", col = mycol[continente])
+
+
+
+# Criando uma Função para a escala, customizar o formato do gráfico
+mycex <- function(var, r, f = sqrt){
+  x = f(var)
+  x_scaled = (x - min(x))/(max(x) - min(x)) # Ajustar uma escala precisa ao gráfico baseado em valores extremos
+  r[1] + x_scaled * (r[2] - r[1])
+}
+
+# Plotagem na área criada anteriormente
+plot(expectativa ~ pibpercap, data = df_1982, log = "x",
+     col = mycol[continente],
+     cex = mycex(pop, r = c(0.2, 10))
+)
+
+
