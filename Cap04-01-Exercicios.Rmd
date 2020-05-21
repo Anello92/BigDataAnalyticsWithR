@@ -1,0 +1,144 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Lista de Exercícios - Capítulo 3
+
+---------------------------------------------------------------------------------------------------------------------------
+
+# Exercício 1 - Pesquise pela função que permite listar todos os arquivo no diretório de trabalho
+list.files() # Listar todo conteúdo do diretório atual sem ter que sair do RStudio
+
+
+
+---------------------------------------------------------------------------------------------------------------------------
+
+# Exercício 2 - Crie um dataframe a partir de 3 vetores: um de caracteres, um lógico e um de números
+       vetor_nome <- c("A","B","C")
+    vetor_numeros <- c(4.5, 3.9, 7.2)
+    vetor_logico  <- c(TRUE, FALSE, FALSE)
+    dataframe1 <- data.frame(vetor_nome, vetor_numeros, vetor_logico)
+    view(dataframe1)
+
+---------------------------------------------------------------------------------------------------------------------------
+
+# Exercício 3 - Considere o vetor abaixo. 
+# Crie um loop que verifique se há números maiores que 10 e imprima o número e uma mensagem no console.
+
+# Criando um Vetor
+vec1 <- c(12, 3, 4, 19, 34)
+vec1
+
+#loop for normalmente é uma das estruturas de repetição que gera mais dúvidas
+for(i in 1:length(vec1)){ #i é o contador in RANGE DE VALORES 1:length(vec1)), ou seja, 1 até o comprimento do vetor vec1(5 posições)
+    if vec1[i] > 10) {    #se o elemento [i] dentro do vetor for maior do que 10
+        print(vec[i])     #imprimir este [i] elemento
+        print("Este elemento do vetor é maior do que 10") #e mensagem na tela
+       } else {
+        print(vec1[i])    #imprimir [i] elementro
+        print("Este elemento do vetor é menor do que 10") #e mensagem na tela
+        
+---------------------------------------------------------------------------------------------------------------------------
+
+# Exercício 4 - Conisdere a lista abaixo. Crie um loop que imprima no console cada elemento da lista
+lst2 <- list(2, 3, 5, 7, 11, 13)
+lst2 #lista é impressa por dimensões 
+
+#usar loop for para percorrer a lista e imprimir cada um de seus elementos
+for(i in 1:length(lst2)) { #independente do tamanho da lista, usamos length para acompanhar seu comprimento no loop
+    print(lst2[[i]]) #com apenas um colchete acessaremos apenas um elemento dentro de uma dimensão, porém queremos todas dimensões
+                     #dois colchetes são usados para acessar as estruturas das listas 
+}
+        
+---------------------------------------------------------------------------------------------------------------------------       
+
+# Exercício 5 - Considere as duas matrizes abaixo. Muito utilizado em MACHINE LEARNING
+# Faça uma multiplicação element-wise e multiplicação normal entre as materizes
+# https:||www.mathwarehouse.com|algebra|matrix|mutiply-matrix.php
+# Matrizes armazenam os coeficientes do modelo de machine learning. 
+
+        
+mat1 <- matrix(c(1:50), nrow = 5, ncol = 5, byrow = T)
+mat1
+mat2 <- t(mat1) #transposta
+mat2
+#criadas duas matrizes de mesmas dimensões (5x5)
+
+# Multiplicação element-wise (multiplicação a nível de elemento, alguns algoritmos trabalham com esse nível de multiplicação em ML
+mat3 <- mat1 * mat2
+        
+# Multiplicação de matrizes (multiplicação tradicional de matrizes)
+mat4 <- mat1 %*% mat2
+mat4
+        
+# item [1,1]  -> (1x1) + (2x2) + (3x3) + (4x4) + (5x5)  = 55
+# item [2,1]  -> (6x1) + (7x2) + (8x3) + (9x4) + (10x5) = 130
+# item [3,1]  -> (11x1) + (12x2) + (13x3) + (14x4) + (15x5) = 205
+
+# Cada algoritmo usa uma abordagem diferente de multiplicação de matrizes
+---------------------------------------------------------------------------------------------------------------------------
+
+# Exercício 6 - Crie um vetor, matriz, lista e dataframe e faça a nomeação de cada um dos objetos
+        
+          vetor1 <- c(12, 3, 4, 19, 34)
+   names(vetor1) <- c("col1","col2","col3","col4","col5")
+        vetor1
+        
+         matriz1 <- matrix(C(1:50), nrow = 5, ncol = 5, byrow = T)
+dimnames(matriz1)<- (list(c("Obs1", "Obs2","Obs3","Obs4", "Obs5") ,  c("Var1", "Var2", "Var3", "Var4", "Var5"))
+                     #dinnames precisa receber o vetor de linhas primeiro
+                     
+          lista1 <- list(2, 3, c(1, 2, 3))
+   names(lista1) <- c("dim1", "dim2", "dim3")
+          lista1
+                     
+          dataframe <- data.frame(c("A","B","C"), c(4.5, 3.9, 7.2), c(TRUE, TRUE, FALSE))
+colnames(dataframe) <- c("Caracteres", "Float", "Logico")
+rownames(dataframe) <- c("Obs1", "Obs2", "Obs3")
+dataframe
+        
+--------------------------------------------------------------------------------------------------------------------------
+
+# Exercício 7 - Considere a matriz abaixo. Atribua valores NA de forma aletória para 50 elementos da matriz
+# Dica: use a função sample()
+matriz2 <- matrix(1:90, 10) # Matriz com 90 elementos, 10 linhas
+matriz2
+                     
+?sample #gera amostras randômicasa|aleatórias
+matriz2[sample(1:50, 10) = NA 
+        # pedir para a função sample considerar quaisquer números de 1 a 50, pegar 10 valores aleatórios e atribuir NA
+matriz2
+---------------------------------------------------------------------------------------------------------------------------
+
+# Exercício 8 - Para a matriz abaixo, calcule a soma por linha e por coluna
+matriz1 <- matrix(c(1:50), nrow = 5, ncol = 5, byrow = T)
+mat1
+ 
+rowSums(matriz1) #soma por linha
+colSums(matriz1) #soma por coluna
+        
+        
+        
+---------------------------------------------------------------------------------------------------------------------------
+
+# Exercício 9 - Para o vetor abaixo, ordene os valores em ordem crescente
+vetor1 <- c(100, 10, 10000, 1000)
+order(vetor1) o. 2 1 4 3 (a posição dos elementos do vetor)
+ 
+#para ver os elementos do vetor ordenados, para isso: aplicar a função order() como índice para o vetor
+vetor1[order(vetor1)]
+        
+        
+---------------------------------------------------------------------------------------------------------------------------
+
+# # Exercício 10 - Imprima no console todos os elementos da matriz abaixo que forem maiores que 15
+mat1 <- matrix(c(1:50), nrow = 5, ncol = 5, byrow = T)
+mat1
+       
+      for(i in matriz1) {
+          if(i > 15) {
+              print(i)
+         }
+ }
+
