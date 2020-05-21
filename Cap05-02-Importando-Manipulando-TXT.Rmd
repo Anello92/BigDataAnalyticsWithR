@@ -1,0 +1,157 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Trabalhando com Arquivos txt
+
+
+# Usando as funções base do R (pacote utils)
+search() 
+# Mostrará os pacotes carregados por padrão, automaticamente teremos funções base disponíveis.
+
+
+# Importando arquivo com read.table()
+?read.table
+
+
+-------------------------------------------------------------------------------------
+
+df1 <- read.table("pedidos.txt")
+# Quando usamos a função read.table, o arquivo "txt" vira um data.frame no RStudio
+# Neste momento o arquivo está na memória RAM, ou seja:
+# Quanto maior o arquivo, mais difícil o processamento do computador.
+
+df1 
+# Imprimir na tela o data.frame, veremos que a linguagem carregou em apenas UMA COLUNA
+# Precisamos indicar ao importar o SEPARADOR
+dim(df1)
+# dimensão 6 linhas e 1 coluna
+
+-------------------------------------------------------------------------------------
+
+df1 <- read.table("pedidos.txt", header = TRUE, sep = ',')
+# Importamos como data.frame, habilitado cabeçalho e separado por colunas
+df1
+# Imprimir na tela data.frame
+dim(df1)
+# dimensão 5 linhas e 3 colunas + cabeçalho
+
+-------------------------------------------------------------------------------------
+
+df1 <- read.table("pedidos.txt", header = TRUE, sep = ',', 
+                  col.names = c("var1", "var2", "var3"))
+# Especificar nome para as colunas deste data.frame ao importa
+df1
+# Imprimir na tela data.frame
+
+-------------------------------------------------------------------------------------
+
+df1 <- read.table("pedidos.txt", header = TRUE, 
+                  sep = ',', 
+                  col.names = c("var1", "var2", "var3"),
+                  na.strings = c('Zico', 'Maradona')) # Muito útil para filtro inicial
+# Especificar nome para as colunas deste data.frame ao importa
+# Ao encontrar as strings "Zico" e "Maradona" substituí-las por NA, apagar o valor
+df1
+
+-------------------------------------------------------------------------------------
+
+str(df1)
+# Visualizar o resultado|tipo da importação 
+
+df1 <- read.table("pedidos.txt", header = TRUE, 
+                  sep = ',', 
+                  col.names = c("var1", "var2", "var3"),
+                  na.strings = c('Zico', 'Maradona'),
+                  stringsAsFactors = FALSE)
+# Desabilitando transformar tudo que é string em fator
+# stringAsFactors = FALSE importará string como string
+df1
+
+-------------------------------------------------------------------------------------
+
+str(df1)
+# Visualizar o resultado|tipo da importação 
+
+# Importando arquivo com read.csv()
+df2 <- read.csv("pedidos.txt") #{utils}
+# read.csv JÁ ESPERA o separadaor de coluna como VÍRGULA 
+# carregado também como data.frame,
+# ocupa MAIS ESPAÇO
+# organiza AUTOMATICAMENTE as colunas de maneira correta
+
+df2
+dim(df2)
+
+-------------------------------------------------------------------------------------
+
+df3 <- read.csv2("pedidos.txt")
+# Essa função REQUER especificar separador
+df3
+dim(df3)
+
+
+df3 <- read.csv2("pedidos.txt", sep = ',') 
+# Separador especificado
+df3
+dim(df3)
+
+-------------------------------------------------------------------------------------
+
+# Importando arquivo com read.delim()
+df4 <- read.delim("pedidos.txt")
+# Essa função REQUER especificar separador
+df4
+
+df4 <- read.delim("pedidos.txt", sep = ',')
+# Separador especificado
+
+df4
+dim(df4)
+
+-------------------------------------------------------------------------------------
+
+# Importando / Exportando - MUITO ÚTIL
+
+write.table(mtcars, file = 'mtcars.txt')
+# função grava em um arquivo os dados processados - IMPORTANTE
+# write.table(dataoriginal, file = "destino.txt"
+dir()
+# comando dir() listará o conteúdo no diretório atual - ÚTIL
+
+df_mtcars <- read.table("mtcars.txt")
+df_mtcars
+dim(df_mtcars)
+
+-------------------------------------------------------------------------------------
+
+# Especificar parâmetros com write.table
+write.table(mtcars, file = "mtcars2.txt", sep = "|", col.names = NA, qmethod = "double")
+list.files()        
+# file = "" - nome do arquivo destino a exportar
+# sep = colunas separadas com "|"
+# col.names = sem títulos nas colunas
+# qmethod = "double" - valor numérico será decimal
+
+-------------------------------------------------------------------------------------
+
+read.table("mtcars2.txt")
+# Leitura do arquivo exportado com write.table()
+df_mtcars2 <- read.table("mtcars2.txt")
+# Aplicando arquivo ao data.frame df_mtcars2
+df_mtcars2
+# Imprimindo 
+
+
+df_mtcars2 <- read.table("mtcars2.txt", sep = '|')
+# Lendo arquivo com separador |
+df_mtcars2
+
+df_mtcars2 <- read.table("mtcars2.txt", sep = '|', encoding = 'UTF-8')
+# Definindo enconding para leitura de formatação de idioma
+df_mtcars2
+
+
+
+
